@@ -75,7 +75,7 @@ int main(void) {
 		printf("failed to append log");
 		exit(1);
 	}
-	fprintf(pfile,"{\n");
+	fprintf(pfile,"[\n");
 
 	std::vector<std::string> header = data_list[0];
 	for (int i = 1; i < data_list.size(); i++) {
@@ -93,7 +93,7 @@ int main(void) {
 		}
 	}
 
-	fprintf(pfile,"\n}");
+	fprintf(pfile,"\n]");
 	fflush(pfile);
 	fclose(pfile);
 
