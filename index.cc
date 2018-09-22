@@ -9,10 +9,10 @@
 
 int main(void) {
 	// read input.csv
-	std::string filename("input.csv");
-	std::ifstream fin(filename);
+	std::string ifilename("input.csv");
+	std::ifstream fin(ifilename);
 	if (!fin) {
-		std::cout << "failed to open " << filename << std::endl;
+		std::cout << "failed to open " << ifilename << std::endl;
 		return -1;
 	}
 	std::vector<std::string> strs;
@@ -67,5 +67,34 @@ int main(void) {
 		}
 		std::cout << std::endl;
 	}
+
+	// trans to json
+	char ofilename[] = "output.json";
+	FILE *pfile = NULL;
+	if (!(pfile = fopen(ofilename,"w"))) {
+		printf("failed to append log");
+		exit(1);
+	}
+	fprintf(pfile,"{\n");
+
+	std::vector<std::string> header = data_list[0];
+	for (int i = 1; i < data_list.size(); i++) {
+		fprintf(pfile,"\n\t[%d] = {", i - 1);
+		std::vector<std::string> data = data_list[i];
+		for (int j = 0; j < header.size(); j++) {
+			fprintf(pfile,"\n\t\t\"%s\" : \"%s\"", header[j].c_str(), data[j].c_str());
+			if (j != header.size() - 1) {
+				fprintf(pfile,",");
+			}
+		}
+		fprintf(pfile,"\n\t}");
+		if (i != data_list.size() - 1) {
+			fprintf(pfile,",");
+		}
+	}
+
+	fprintf(pfile,"\n}");
+	fflush(pfile);
+	fclose(pfile);
 
 }
